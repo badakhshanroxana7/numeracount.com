@@ -7,7 +7,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
   }
   const supabase = await userClient();
-  const { error } = await supabase.auth.signInWithOtp({ email: email.toLowerCase(), options: { shouldCreateUser: true } });
-  if (error) return NextResponse.json({ error: "We could not send a code. Please try again." }, { status: 500 });
+  const siteUrl = process.env.SITE_URL || new URL(request.url).origin;
+  const { error } = await supabase.auth.signInWithOtp({
+    email: email.toLowerCase(),
+    options: { shouldCreateUser: true, emailRedirectTo: `${siteUrl}/auth/callback` },
+  });
+  if (error) return NextResponse.json({ error: "We could not send a sign-in link. Please try again." }, { status: 500 });
   return NextResponse.json({ ok: true });
 }
