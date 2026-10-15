@@ -1,23 +1,9 @@
-import { requiredEnv } from "./env";
+import { boxAccessToken, boxRootFolderId, setBoxRootFolderId } from "./box-oauth";
 
 type BoxItem = { id: string; type: "file" | "folder"; name: string; size?: number; modified_at?: string; parent?: { id: string } };
 
-async function boxToken() {
-  const body = new URLSearchParams({
-    grant_type: "client_credentials",
-    client_id: requiredEnv("BOX_CLIENT_ID"),
-    client_secret: requiredEnv("BOX_CLIENT_SECRET"),
-    box_subject_type: "enterprise",
-    box_subject_id: requiredEnv("BOX_ENTERPRISE_ID"),
-  });
-  const response = await fetch("https://api.box.com/oauth2/token", { method: "POST", body, cache: "no-store" });
-  if (!response.ok) throw new Error(`Box authentication failed (${response.status})`);
-  const data = await response.json();
-  return data.access_token as string;
-}
-
 async function boxFetch(path: string, init: RequestInit = {}, upload = false) {
-  const token = await boxToken();
+  const token = await boxAccessToken();
   const base = upload ? "https://upload.box.com/api/2.0" : "https://api.box.com/2.0";
   const response = await fetch(`${base}${path}`, {
     ...init,
@@ -35,9 +21,21 @@ export async function createClientFolder(name: string) {
   const response = await boxFetch("/folders", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, parent: { id: requiredEnv("BOX_ROOT_FOLDER_ID") } }),
+    body: JSON.stringify({ name, parent: { id: await boxRootFolderId() } }),
   });
   return (await response.json()).id as string;
+}
+
+export async function ensurePortalRootFolder() {
+  try { return await boxRootFolderId(); } catch { /* A new connection has no root folder yet. */ }
+  const response = await boxFetch("/folders", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: "Numeracount Client Portal", parent: { id: "0" } }),
+  });
+  const id = (await response.json()).id as string;
+  await setBoxRootFolderId(id);
+  return id;
 }
 
 export async function listFiles(folderId: string): Promise<BoxItem[]> {

@@ -12,10 +12,23 @@ create table if not exists public.clients (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.box_connection (
+  id text primary key check (id = 'primary'),
+  access_token text not null,
+  refresh_token text not null,
+  expires_at timestamptz not null,
+  root_folder_id text,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.box_connection add column if not exists root_folder_id text;
+
 alter table public.profiles enable row level security;
 alter table public.clients enable row level security;
+alter table public.box_connection enable row level security;
 revoke all on public.profiles from anon, authenticated;
 revoke all on public.clients from anon, authenticated;
+revoke all on public.box_connection from anon, authenticated;
 
 create or replace function public.create_profile()
 returns trigger language plpgsql security definer set search_path = '' as $$
