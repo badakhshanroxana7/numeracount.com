@@ -10,7 +10,9 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open `http://localhost:3000`. The public site and sign-in page work without credentials; signing in and using the portal require the services below.
+Open `http://localhost:3000`. The public site works without credentials; signing in and using the portal require the services below.
+
+The public site deploys with `PORTAL_ENABLED=false` by default. Portal links then lead to a setup status page. Keep it disabled until Supabase, Box, sign-in email delivery, and client access have been tested end to end; set it to `true` and redeploy when the portal is ready.
 
 ## Required services
 

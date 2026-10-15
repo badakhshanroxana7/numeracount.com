@@ -1,6 +1,7 @@
 import { adminClient, userClient } from "./supabase";
 
 export async function getActor() {
+  if (process.env.PORTAL_ENABLED !== "true") return null;
   const supabase = await userClient();
   const { data: { user }, error } = await supabase.auth.getUser();
   if (error || !user?.email) return null;
