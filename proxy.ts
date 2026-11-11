@@ -2,6 +2,10 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function proxy(request: NextRequest) {
+  if (process.env.PORTAL_ENABLED !== "true") {
+    if (request.nextUrl.pathname.startsWith("/api/")) return NextResponse.json({ error: "Portal is closed" }, { status: 503 });
+    return NextResponse.redirect(new URL("/status", request.url));
+  }
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !anonKey) return NextResponse.next({ request });
@@ -21,4 +25,4 @@ export async function proxy(request: NextRequest) {
   return response;
 }
 
-export const config = { matcher: ["/portal/:path*", "/api/:path*"] };
+export const config = { matcher: ["/portal/:path*", "/api/:path*", "/auth/:path*"] };
