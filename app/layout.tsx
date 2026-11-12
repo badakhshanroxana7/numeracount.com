@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Numeracount | Bookkeeping Services",
   icons: { icon: "/icon.svg" },
-  description: "Bookkeeping services from Numeracount. Organized financial records, clear information, and personal support. Contact info@numeracount.com.",
+  description: "Bookkeeping, reconciliations, monthly reporting, catch-up and cleanup, payroll support, and business financial guidance. Contact Numeracount at info@numeracount.com.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

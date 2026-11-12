@@ -92,3 +92,31 @@ dialog.modal::backdrop{background:rgb(14 44 31 / .65)}
 .portal-sidebar .brand-abacus svg{width:27px;height:27px}
 .modal p,.client-card-link,.sidebar-secure strong{color:#345d48}
 .modal .form-error{color:#a42626}
+
+/* More detailed service information, with the existing green visual system. */
+.services-detail .section-heading>p,.getting-started-section .section-heading>p{max-width:700px;margin-left:auto;margin-right:auto}
+.service-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:48px}
+.service-detail-card{background:#fff;border:1px solid #c7d4ca;border-radius:16px;padding:32px;display:flex;flex-direction:column;min-width:0}
+.service-detail-card .step-icon{margin-bottom:23px}
+.service-detail-card h3{font-size:23px;line-height:1.35;margin-bottom:14px}
+.service-detail-card p,.service-detail-card li{font-size:15px;line-height:1.75;color:#455f50}
+.service-detail-card ul{padding-left:21px;margin:0 0 23px}
+.service-detail-card li{padding-left:3px;margin-bottom:8px}
+.service-detail-card li::marker{color:#276f50}
+.service-detail-card .service-outcome{margin:auto 0 0;padding-top:20px;border-top:1px solid #dce5dd;font-size:14px}
+.services-next{text-align:center;margin-top:35px}.services-next p{color:#455f50;font-size:15px;line-height:1.7}
+.getting-started-section{background:#eef4ed;padding:80px 0}
+.getting-started-list{list-style:none;counter-reset:steps;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0;gap:30px;margin:45px 0 0}
+.process-number{display:grid;place-items:center;width:43px;height:43px;border:1px solid #8eac96;background:#fff;border-radius:50%;color:#246b50;font-weight:800;font-size:13px;margin-bottom:22px}
+.getting-started-list h3{font-size:19px;line-height:1.4;margin-bottom:12px}
+.getting-started-list p{font-size:14px;line-height:1.8;color:#455f50;margin:0}
+.faq-section{display:grid;grid-template-columns:.8fr 1.2fr;gap:65px;padding-top:85px;padding-bottom:30px}
+.faq-intro h2{font-size:36px;line-height:1.25;margin:18px 0}
+.faq-intro p{font-size:15px;line-height:1.8;color:#455f50}.faq-intro a{text-decoration:underline;text-underline-offset:4px;overflow-wrap:anywhere}
+.faq-list{min-width:0}.faq-list details{border-bottom:1px solid #b9cbbd}
+.faq-list summary{font-weight:700;line-height:1.6;cursor:pointer;padding:19px 12px;min-height:56px;border-radius:5px}
+.faq-list summary:hover{background:#eaf2e9}.faq-list details[open] summary{background:#eaf2e9}
+.faq-list details p{font-size:15px;line-height:1.85;color:#455f50;margin:16px 12px 24px}
+.faq-list summary:focus-visible{outline:3px solid #095d40;outline-offset:3px}
+@media(max-width:900px){.getting-started-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px}.faq-section{grid-template-columns:1fr;gap:24px}.service-detail-card{padding:27px}}
+@media(max-width:650px){.service-detail-grid{grid-template-columns:1fr;gap:18px;margin-top:35px}.service-detail-card{padding:25px}.service-detail-card h3{font-size:22px}.getting-started-section{padding:65px 0}.getting-started-list{grid-template-columns:1fr;gap:30px}.getting-started-list li{padding-bottom:25px;border-bottom:1px solid #b9cbbd}.getting-started-list li:last-child{padding-bottom:0;border-bottom:0}.faq-section{padding-top:65px}.faq-intro h2{font-size:32px}.faq-list summary{padding-left:6px;padding-right:6px}}
