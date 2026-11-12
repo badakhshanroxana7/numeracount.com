@@ -22,5 +22,5 @@ export default function UploadForm({ clientId }: { clientId: string }) {
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Upload failed."); }
     finally { setBusy(false); if (input.current) input.current.value = ""; }
   }
-  return <div className="upload-control"><input ref={input} type="file" hidden onChange={(event) => upload(event.target.files?.[0])}/><button className="button button-primary" onClick={() => input.current?.click()} disabled={busy}><Upload size={17}/>{busy ? "Uploading…" : "Upload document"}</button>{error && <span className="form-error" role="alert">{error}</span>}</div>;
+  return <div className="upload-control"><input ref={input} type="file" aria-label="Choose document to upload" hidden onChange={(event) => upload(event.target.files?.[0])}/><button className="button button-primary" onClick={() => input.current?.click()} disabled={busy} aria-describedby={error ? "upload-error" : undefined}><Upload size={17} aria-hidden="true"/>{busy ? "Uploading…" : "Upload document"}</button>{error && <span id="upload-error" className="form-error" role="alert">{error}</span>}</div>;
 }
