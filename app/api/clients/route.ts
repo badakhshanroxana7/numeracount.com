@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   try {
     // Invite only from an explicitly authorized staff action. Existing users are
     // resolved without exposing the directory to clients.
-    const { data: invited, error: inviteError } = await admin.auth.admin.inviteUserByEmail(normalizedEmail);
+    const { data: invited, error: inviteError } = await admin.auth.admin.inviteUserByEmail(normalizedEmail, { redirectTo: `${new URL(process.env.SITE_URL || request.url).origin}/auth/callback` });
     let userId = invited.user?.id;
     if (!userId) {
       for (let page = 1; ; page++) {
