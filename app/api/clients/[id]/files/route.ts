@@ -6,7 +6,8 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   const { id } = await context.params;
   const access = await accessibleClient(id);
   if (!access) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  if (request.headers.get("origin") !== new URL(request.url).origin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const expectedOrigin = new URL(process.env.SITE_URL || request.url).origin;
+  if (request.headers.get("origin") !== expectedOrigin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const input = await request.json().catch(() => null);
   if (!input || typeof input.name !== "string" || !input.name.trim() || input.name.length > 200 || !Number.isInteger(input.size) || input.size <= 0 || input.size > MAX_FILE_SIZE) {
     return NextResponse.json({ error: "Choose a file up to 10 MB." }, { status: 400 });
