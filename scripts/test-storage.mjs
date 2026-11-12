@@ -48,7 +48,9 @@ try {
   const removed = await sa.remove([pathA]);
   assert.ok(removed.error || removed.data.length === 0, 'Client deletion must not remove a file');
   assert.ifError((await sa.download(pathA)).error);
-  assert.ok((await sa.move(pathA, `${a.id}/${randomUUID()}_moved.txt`)).error, 'Move must fail');
+  const movedPath = `${a.id}/${randomUUID()}_moved.txt`;
+  paths.push(movedPath);
+  assert.ok((await sa.move(pathA, movedPath)).error, 'Move must fail');
   const signedPath = `${a.id}/${randomUUID()}_signed.txt`;
   const signed = await sa.createSignedUploadUrl(signedPath, { upsert: false });
   assert.ifError(signed.error);
