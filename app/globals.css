@@ -120,3 +120,12 @@ dialog.modal::backdrop{background:rgb(14 44 31 / .65)}
 .faq-list summary:focus-visible{outline:3px solid #095d40;outline-offset:3px}
 @media(max-width:900px){.getting-started-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px}.faq-section{grid-template-columns:1fr;gap:24px}.service-detail-card{padding:27px}}
 @media(max-width:650px){.service-detail-grid{grid-template-columns:1fr;gap:18px;margin-top:35px}.service-detail-card{padding:25px}.service-detail-card h3{font-size:22px}.getting-started-section{padding:65px 0}.getting-started-list{grid-template-columns:1fr;gap:30px}.getting-started-list li{padding-bottom:25px;border-bottom:1px solid #b9cbbd}.getting-started-list li:last-child{padding-bottom:0;border-bottom:0}.faq-section{padding-top:65px}.faq-intro h2{font-size:32px}.faq-list summary{padding-left:6px;padding-right:6px}}
+
+/* Password sign-in, setup and recovery controls. */
+.auth-form label:not(:first-child){margin-top:18px}
+.auth-form .show-password{display:flex;align-items:center;gap:10px;min-height:44px;margin:8px 0 0;font-size:13px;cursor:pointer}
+.auth-form .show-password input{width:18px;height:18px;padding:0;margin:0;accent-color:#1f7155;flex-shrink:0}
+.auth-options{display:flex;align-items:flex-start;flex-direction:column;gap:5px;margin-top:20px}
+.auth-options .plain-button,.auth-options .text-link{display:inline-flex;align-items:center;min-height:44px;padding:7px 0;margin:0;border:0;background:none;color:#256e4e;font-size:13px;font-weight:700;line-height:1.5;text-align:left;text-decoration:underline;text-underline-offset:4px;white-space:normal}
+.auth-instructions{font-size:14px;line-height:1.75;color:#4e655b;margin-bottom:20px}
+.auth-form p[role=status]{line-height:1.8;overflow-wrap:anywhere}
