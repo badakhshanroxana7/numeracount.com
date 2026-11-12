@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   const siteUrl = process.env.SITE_URL || new URL(request.url).origin;
   const { error } = await supabase.auth.signInWithOtp({
     email: email.toLowerCase(),
-    options: { shouldCreateUser: true, emailRedirectTo: `${siteUrl}/auth/callback` },
+    options: { shouldCreateUser: false, emailRedirectTo: `${siteUrl}/auth/callback` },
   });
   if (error) return NextResponse.json({ error: "We could not send a sign-in link. Please try again." }, { status: 500 });
   return NextResponse.json({ ok: true });
