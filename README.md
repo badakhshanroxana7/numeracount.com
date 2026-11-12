@@ -41,3 +41,12 @@ npm run dev
 ```
 
 The homepage works without service credentials. Enable the portal only in a controlled local/preview environment for tests. Do not enable production until the complete flow passes.
+
+
+## Password sign-in and recovery
+
+Clients use their registered email address as their username. The login page defaults to password sign-in and also offers **Set up or reset password** and the existing email-link alternative. Existing clients request setup once; new invitations lead to password setup. Supabase stores and hashes passwords; staff never choose or see a client's password.
+
+Setup/recovery email redirects use the existing allowlisted `/auth/callback`. Recovery and invitations establish one-time sessions in the receiving browser; the password page consumes the URL fragment, removes it from browser history, validates the user, and permits updating only that user's password. Requests are checked against the configured SITE_URL origin. Recovery responses do not reveal whether an email is registered. Ordinary password sign-in creates no accounts. File ownership and no-delete policies remain unchanged.
+
+New passwords use 12–72 characters and support password managers, pasting and a show-password control. Existing magic-link clients can also sign in using that alternative and visit `/auth/password` to set their own password. Supabase's configured password policy and rate limits also apply.
