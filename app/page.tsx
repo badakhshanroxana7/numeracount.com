@@ -1,27 +1,67 @@
 import Link from "next/link";
-import { ArrowRight, Check, FileLock2, Fingerprint, LockKeyhole, ShieldCheck } from "lucide-react";
+import { ArrowRight, BookOpen, Check, ChartNoAxesCombined, Mail, LockKeyhole, ShieldCheck } from "lucide-react";
+import Brand from "./components/brand";
+
+const email = "info@numeracount.com";
+const contactHref = `mailto:${email}`;
 
 export default function Home() {
   const portalReady = process.env.PORTAL_ENABLED === "true";
   const portalHref = portalReady ? "/login" : "/status";
-  return <main className="site-shell">
+  return <div className="site-shell bookkeeping-site">
     <header className="topbar container">
-      <Link href="/" className="brand"><span className="brand-mark">n<span>.</span></span><span>numera<span className="brand-light">count</span></span></Link>
-      <nav className="topnav"><a href="#how-it-works">How it works</a><a href="#security">Security</a><Link href={portalHref} className="button button-small button-dark">{portalReady ? "Client sign in" : "Portal status"} <ArrowRight size={15}/></Link></nav>
+      <Brand/>
+      <nav className="topnav" aria-label="Main navigation">
+        <a href="#bookkeeping">Bookkeeping</a><a href="#about">About us</a><a href="#contact">Contact</a>
+        <Link href={portalHref} className="button button-small button-dark">Client sign in <ArrowRight size={15} aria-hidden="true"/></Link>
+      </nav>
     </header>
-
-    <section className="hero container">
-      <div className="hero-copy"><div className="eyebrow"><span className="status-dot"/> A better way to work together</div><h1>Your important documents, <em>in the right hands.</em></h1><p>One secure space to share, receive, and keep track of documents with the Numeracount team. Simple for you. Organized for everyone.</p><div className="hero-actions"><Link href={portalHref} className="button button-primary">{portalReady ? "Access your portal" : "Portal coming soon"} <ArrowRight size={18}/></Link><a href="#how-it-works" className="text-link">See how it works <ArrowRight size={16}/></a></div><div className="hero-proof"><div className="proof-icons"><ShieldCheck size={19}/><LockKeyhole size={19}/><Fingerprint size={19}/></div><span>Private by design. Easy by nature.</span></div></div>
-      <div className="hero-art" aria-label="Illustration of a private document portal"><div className="art-orbit orbit-one"/><div className="art-orbit orbit-two"/><div className="art-shape art-shape-one"/><div className="art-shape art-shape-two"/><div className="floating-label"><span className="floating-icon"><Check size={15}/></span> Document received securely</div><div className="portal-card"><div className="portal-card-top"><span className="tiny-brand">n<span>.</span></span><span className="card-pill"><span className="status-dot"/> Private workspace</span></div><div className="card-greeting">Good morning, Alex <span>✳</span></div><p>Your documents, all in one place.</p><div className="card-subhead">RECENT FILES <span>View all →</span></div><div className="mock-file"><div className="mock-file-icon mint"><FileLock2 size={18}/></div><div><strong>2025 tax documents.pdf</strong><small>Shared with your team</small></div><span className="mock-check"><Check size={14}/></span></div><div className="mock-file"><div className="mock-file-icon peach"><FileLock2 size={18}/></div><div><strong>Account statements.pdf</strong><small>Added yesterday</small></div><span className="mock-check"><Check size={14}/></span></div><div className="mock-upload">＋ &nbsp; Upload a document</div></div><div className="art-footnote"><span className="lock-circle"><LockKeyhole size={14}/></span> Just you and your Numeracount team</div></div>
-    </section>
-
-    <section className="trust-strip"><div className="container trust-inner"><span>BUILT AROUND YOUR PEACE OF MIND</span><div><ShieldCheck size={18}/> Private client spaces</div><div><LockKeyhole size={18}/> Secure file exchange</div><div><Check size={18}/> Clear and simple</div></div></section>
-
-    <section id="how-it-works" className="steps-section container"><div className="section-heading"><span className="section-kicker">HOW IT WORKS</span><h2>Everything you need.<br/><em>Nothing in your way.</em></h2><p>Less back and forth. More confidence that everything is where it should be.</p></div><div className="steps-grid"><div className="step-card"><span className="step-number">01</span><div className="step-icon"><Fingerprint size={25}/></div><h3>Sign in simply</h3><p>Enter your email and use a one-time link. No password to remember.</p></div><div className="step-card"><span className="step-number">02</span><div className="step-icon"><FileLock2 size={25}/></div><h3>Share your files</h3><p>Upload documents directly to your private client space whenever you need to.</p></div><div className="step-card"><span className="step-number">03</span><div className="step-icon"><ShieldCheck size={25}/></div><h3>Stay in the loop</h3><p>Find files shared with you in the same organized place.</p></div></div></section>
-
-    <section id="security" className="security-section"><div className="container security-grid"><div className="security-graphic"><div className="security-glow"/><div className="security-lock"><LockKeyhole size={58} strokeWidth={1.4}/></div><div className="security-badge badge-one"><Check size={15}/> Your space</div><div className="security-badge badge-two"><Check size={15}/> Your files</div></div><div><span className="section-kicker">BUILT FOR TRUST</span><h2>Private space.<br/><em>Personal attention.</em></h2><p>Every client will have a dedicated workspace. Access will be managed by the Numeracount team, with documents stored in a private client space.</p><ul><li><Check size={18}/> Email link sign-in</li><li><Check size={18}/> Access limited to your own documents</li><li><Check size={18}/> Private document storage</li></ul><Link href={portalHref} className="button button-dark">{portalReady ? "Go to your portal" : "See portal status"} <ArrowRight size={17}/></Link></div></div></section>
-
-    <section className="cta container"><div><span className="section-kicker">COMING TOGETHER</span><h2>Let’s keep things moving.</h2><p>{portalReady ? "Your documents are one sign-in away." : "The private client portal is being connected and tested."}</p></div><Link href={portalHref} className="button button-primary">{portalReady ? "Access your portal" : "See portal status"} <ArrowRight size={18}/></Link></section>
-    <footer className="footer"><div className="container footer-inner"><Link href="/" className="brand"><span className="brand-mark">n<span>.</span></span><span>numera<span className="brand-light">count</span></span></Link><span>© {new Date().getFullYear()} Numeracount. All rights reserved.</span><span>Made for better collaboration.</span></div></footer>
-  </main>;
+    <main id="main-content" tabIndex={-1}>
+      <section className="hero container" aria-labelledby="home-title">
+        <div className="hero-copy">
+          <div className="eyebrow"><span className="status-dot" aria-hidden="true"/> BOOKKEEPING WITH NUMERACOUNT</div>
+          <h1 id="home-title">Clear books.<br/><em>A clearer picture.</em></h1>
+          <p>Your financial records should help you understand your business. Numeracount provides bookkeeping support to keep those records organized and your numbers easier to follow.</p>
+          <div className="hero-actions"><a href={contactHref} className="button button-primary">Let’s talk bookkeeping <ArrowRight size={18} aria-hidden="true"/></a><a href="#bookkeeping" className="text-link">Explore our services <ArrowRight size={16} aria-hidden="true"/></a></div>
+          <p className="hero-proof"><BookOpen size={19} aria-hidden="true"/> Thoughtful support for the details that count.</p>
+        </div>
+        <div className="bookkeeping-visual" aria-hidden="true">
+          <div className="ledger-orbit"/>
+          <div className="ledger-card">
+            <div className="ledger-topline"><span className="ledger-symbol"><ChartNoAxesCombined size={25}/></span><span>THE BIGGER PICTURE</span></div>
+            <div className="ledger-heading">It starts with<br/><span>well-kept books.</span></div>
+            <div className="ledger-rule"/>
+            <div className="ledger-entry"><span className="ledger-check"><Check size={17}/></span><div><strong>Organized records</strong><span>The details, brought together.</span></div></div>
+            <div className="ledger-entry"><span className="ledger-check"><Check size={17}/></span><div><strong>A clearer view</strong><span>Your numbers, easier to follow.</span></div></div>
+            <div className="ledger-entry"><span className="ledger-check"><Check size={17}/></span><div><strong>Personal attention</strong><span>A team you can connect with.</span></div></div>
+            <div className="ledger-bottom">Less guesswork. More understanding.</div>
+          </div>
+          <div className="ledger-note"><BookOpen size={18}/> Make sense of the numbers.</div>
+        </div>
+      </section>
+      <div className="trust-strip"><div className="container trust-inner"><span>ATTENTION TO WHAT MATTERS</span><div><BookOpen size={18} aria-hidden="true"/> Organized records</div><div><ChartNoAxesCombined size={18} aria-hidden="true"/> Clear information</div><div><Mail size={18} aria-hidden="true"/> A direct connection</div></div></div>
+      <section id="bookkeeping" className="steps-section container" aria-labelledby="services-title">
+        <div className="section-heading"><span className="section-kicker">OUR SERVICES</span><h2 id="services-title">Bookkeeping that brings<br/><em>the details into focus.</em></h2><p>Practical support for keeping track of your business finances.</p></div>
+        <div className="steps-grid">
+          <article className="step-card"><span className="step-number" aria-hidden="true">01</span><div className="step-icon"><BookOpen size={25} aria-hidden="true"/></div><h3>Keep your records organized</h3><p>Bring your financial records together so the information you need is easier to find and follow.</p></article>
+          <article className="step-card"><span className="step-number" aria-hidden="true">02</span><div className="step-icon"><ChartNoAxesCombined size={25} aria-hidden="true"/></div><h3>Understand your numbers</h3><p>A clearer view of your books helps you see where things stand and ask informed questions.</p></article>
+          <article className="step-card"><span className="step-number" aria-hidden="true">03</span><div className="step-icon"><Mail size={25} aria-hidden="true"/></div><h3>Work with a real team</h3><p>Talk with Numeracount about your bookkeeping needs and the support that makes sense for you.</p></article>
+        </div>
+      </section>
+      <section id="about" className="about-section" aria-labelledby="about-title"><div className="container about-grid">
+        <div><span className="section-kicker">ABOUT NUMERACOUNT</span><h2 id="about-title">The details matter.<br/><em>So does the person behind them.</em></h2></div>
+        <div><p>Numeracount provides bookkeeping services with a practical focus: organized records, clear information, and a straightforward working relationship.</p><p>We believe you should feel comfortable asking questions about your books. Tell us what you’re looking for, and we’ll start the conversation there.</p><a href={contactHref} className="text-link">Get in touch <ArrowRight size={17} aria-hidden="true"/></a></div>
+      </div></section>
+      <section className="container client-support" aria-labelledby="existing-client-title">
+        <div className="client-support-icon"><ShieldCheck size={30} aria-hidden="true"/></div>
+        <div><span className="section-kicker">FOR EXISTING CLIENTS</span><h2 id="existing-client-title">Your documents have a private place.</h2><p>Sign in to exchange documents with the Numeracount team. Your client space is restricted to you and authorized staff.</p></div>
+        <Link href={portalHref} className="button button-dark"><LockKeyhole size={17} aria-hidden="true"/> Client sign in</Link>
+      </section>
+      <section id="contact" className="contact-section" aria-labelledby="contact-title"><div className="container contact-grid">
+        <div><span className="section-kicker">LET’S CONNECT</span><h2 id="contact-title">Let’s talk about<br/>your bookkeeping.</h2><p>Tell us a little about your business and the bookkeeping support you’re looking for.</p></div>
+        <div className="contact-details"><span>Email Numeracount</span><a href={contactHref} className="contact-email">{email}</a><a href={contactHref} className="button button-primary">Email our team <ArrowRight size={18} aria-hidden="true"/></a></div>
+      </div></section>
+    </main>
+    <footer className="footer"><div className="container footer-inner"><Brand/><span>© {new Date().getFullYear()} Numeracount. All rights reserved.</span><a href={contactHref}>{email}</a></div></footer>
+  </div>;
 }
