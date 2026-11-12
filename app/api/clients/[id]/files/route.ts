@@ -1,22 +1,25 @@
 import { NextResponse } from "next/server";
 import { accessibleClient } from "@/lib/auth";
-import { uploadFile } from "@/lib/box";
+import { documentPath, documentStorage, MAX_FILE_SIZE } from "@/lib/documents";
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
   const access = await accessibleClient(id);
   if (!access) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  const length = Number(request.headers.get("content-length") || "0");
-  if (length > 10 * 1024 * 1024 + 4096) return NextResponse.json({ error: "Maximum file size is 10 MB." }, { status: 413 });
-  const form = await request.formData();
-  const file = form.get("file");
-  if (!(file instanceof File) || file.size === 0 || file.size > 10 * 1024 * 1024 || file.name.length > 200) {
+  const expectedOrigin = new URL(process.env.SITE_URL || request.url).origin;
+  if (request.headers.get("origin") !== expectedOrigin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const input = await request.json().catch(() => null);
+  if (!input || typeof input.name !== "string" || !input.name.trim() || input.name.length > 200 || !Number.isInteger(input.size) || input.size <= 0 || input.size > MAX_FILE_SIZE) {
     return NextResponse.json({ error: "Choose a file up to 10 MB." }, { status: 400 });
   }
   try {
-    await uploadFile(access.client.box_folder_id, file);
-    return NextResponse.json({ ok: true });
+    const name = input.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const path = documentPath(access, `${crypto.randomUUID()}_${name}`);
+    const storage = await documentStorage(access);
+    const { data, error } = await storage.createSignedUploadUrl(path, { upsert: false });
+    if (error) throw error;
+    return NextResponse.json({ path, token: data.token }, { headers: { "Cache-Control": "no-store" } });
   } catch {
-    return NextResponse.json({ error: "Upload failed. Please try again." }, { status: 500 });
+    return NextResponse.json({ error: "Upload unavailable. Please contact Numeracount." }, { status: 500 });
   }
 }

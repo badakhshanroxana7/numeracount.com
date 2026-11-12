@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { getActor } from "@/lib/auth";
-import { createClientFolder } from "@/lib/box";
 import { adminClient } from "@/lib/supabase";
 
 export async function POST(request: Request) {
@@ -15,12 +14,23 @@ export async function POST(request: Request) {
   const { data: existing } = await admin.from("clients").select("id").eq("email", normalizedEmail).maybeSingle();
   if (existing) return NextResponse.json({ error: "A client with this email already exists." }, { status: 409 });
   try {
-    const folderId = await createClientFolder(`${name.trim()} - ${crypto.randomUUID()}`);
-    const { data, error } = await admin.from("clients").insert({ name: name.trim(), email: normalizedEmail, box_folder_id: folderId }).select("id").single();
+    // Invite only from an explicitly authorized staff action. Existing users are
+    // resolved without exposing the directory to clients.
+    const { data: invited, error: inviteError } = await admin.auth.admin.inviteUserByEmail(normalizedEmail);
+    let userId = invited.user?.id;
+    if (!userId) {
+      for (let page = 1; ; page++) {
+        const { data: users, error } = await admin.auth.admin.listUsers({ page, perPage: 100 });
+        if (error) throw error;
+        userId = users.users.find(user => user.email?.toLowerCase() === normalizedEmail)?.id;
+        if (userId || users.users.length < 100) break;
+      }
+    }
+    if (!userId) throw inviteError || new Error("Unable to link client account");
+    const { data, error } = await admin.from("clients").insert({ name: name.trim(), email: normalizedEmail, auth_user_id: userId }).select("id").single();
     if (error) throw error;
-    const { error: inviteError } = await admin.auth.admin.inviteUserByEmail(normalizedEmail);
     return NextResponse.json({ id: data.id, invitationSent: !inviteError }, { status: 201 });
   } catch {
-    return NextResponse.json({ error: "Could not create client space. Check Box and database settings." }, { status: 500 });
+    return NextResponse.json({ error: "Could not create client space. Check invitation delivery and database settings." }, { status: 500 });
   }
 }
